@@ -31,7 +31,7 @@ EXPOSE 80
 
 ```bash
 # -t 代表標記名稱，最後的「.」代表當前目錄
-docker build -t mcl-profile:v1 .
+docker build -t mcl-docker-image:v1 .
 # 顯示現在有什麼image
 docker images
 ```
@@ -40,7 +40,7 @@ docker images
 
 ```bash
 # -d: 背景執行, -p: 電腦 8080 對接容器 80
-docker run -d -p 8080:80 --name docker-web mcl-profile:v1
+docker run -d -p 8080:80 --name docker-web mcl-docker-image:v1
 ```
 ### Step 5：查看成果
 
@@ -72,7 +72,7 @@ version: '3.8'
 
 services:
   web:
-    image: mcl-profile:v1
+    image: mcl-docker-image:v1
     container_name: docker-compose-web
     ports:
       - "8081:80"
