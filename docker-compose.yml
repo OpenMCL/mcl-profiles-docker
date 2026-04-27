@@ -1,0 +1,10 @@
+version: '3.8'  
+
+services:
+  web-profile:  
+    image: mcl-profile-docker:latest  
+    container_name: My-compose-web  
+    ports:
+      - "8081:80"  
+    restart: always  
+
