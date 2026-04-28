@@ -24,6 +24,7 @@ sh get-docker.sh
 > **幾個補充提醒：**
 > - 裝完後預設只有 root 能跑 Docker，如果你想讓一般使用者也能用，要加進 `docker` 群組：
 >   ```bash
+>   sudo groupadd docker
 >   sudo usermod -aG docker $USER
 >   ```
 >   然後重新登入才會生效。
