@@ -95,12 +95,32 @@ docker-compose up -d
 *   **查看日誌**：`docker compose logs -f` 即時追蹤（Follow）容器的日誌輸出。
 
 
+## 進階補充：使用 .dockerignore
+
+當我們執行 `docker build` 時，Docker 會將當前目錄下的所有檔案發送到 Docker Daemon。為了避免將不必要的檔案（如 `.git`、`README.md` 或本地開發工具的設定）包進 Image 中，我們可以建立一個 `.dockerignore` 檔案。
+
+這可以讓 Image 體積更小，並加快 Build 的速度。
+
+### 如何實作：
+在專案根目錄建立 `.dockerignore`，並填入以下內容：
+
+```text
+.git
+.gitignore
+README.md
+Dockerfile
+docker-compose.yml
+```
+
+---
+
 ## 檔案結構
 
 ```
 mcl-profiles-docker/
 ├── Dockerfile              # 定義如何建立 Docker Image 的說明文件
 ├── docker-compose.yml      # 定義與啟動 Docker 容器的設定檔
+├── .dockerignore           # 排除不需要包進 Image 的檔案 (選用)
 ├── index.html              # 團隊首頁
 ├── styles.css              # 共用樣式
 ├── profiles/
