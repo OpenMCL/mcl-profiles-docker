@@ -40,8 +40,8 @@ docker images
 ### Step 4：Run Container
 
 ```bash
-# -d: 背景執行, -p: 電腦 8080 對接容器 80
-docker run -d -p 8080:80 --name docker-web mcl-docker-image:v1
+# -d: 背景執行, --rm: 停止後自動刪除容器, -p: 電腦 8080 對接容器 80
+docker run -d --rm -p 8080:80 --name docker-web mcl-docker-image:v1
 ```
 ### Step 5：查看成果
 
@@ -95,7 +95,17 @@ docker-compose up -d
 *   **查看日誌**：`docker compose logs -f` 即時追蹤（Follow）容器的日誌輸出。
 
 
-## 進階補充：使用 .dockerignore
+## 進階補充 1：Docker Volumes (即時開發模式)
+
+在開發時，如果每次修改 HTML 都要重新 `docker build` 會非常沒效率。我們可以使用 **Volume** 功能，將本地的資料夾直接「掛載」到容器內，達成**修改存檔，網頁立即更新**的效果。
+
+```bash
+# -v 代表掛載路徑：[本地絕對路徑]:[容器內路徑]
+# $(pwd) 會自動抓取你目前所在的目錄
+docker run -d --rm -p 8080:80 -v $(pwd):/usr/share/nginx/html --name docker-dev mcl-docker-image:v1
+```
+
+## 進階補充 2：使用 .dockerignore
 
 當我們執行 `docker build` 時，Docker 會將當前目錄下的所有檔案發送到 Docker Daemon。為了避免將不必要的檔案（如 `.git`、`README.md` 或本地開發工具的設定）包進 Image 中，我們可以建立一個 `.dockerignore` 檔案。
 
@@ -111,6 +121,46 @@ README.md
 Dockerfile
 docker-compose.yml
 ```
+
+## 進階補充 3：發佈 Image 到 GHCR
+
+大家都有 GitHub 帳號，我們可以直接將 Image 上傳到 **GitHub Container Registry (GHCR)**。請按照以下步驟操作：
+
+1.  **登入 GHCR**：
+    我們需要使用 GitHub 的 **個人存取權杖 (PAT)** 來登入：
+    1.  至 GitHub [Settings > Developer settings > Personal access tokens (classic)](https://github.com/settings/tokens) 產生一個 Token。
+    2.  點擊 **Generate new token (classic)**，Note 隨意填寫，並勾選 **`write:packages`** 權限後點擊產生。
+    3.  複製該 Token (`ghp_` 開頭的字串)。
+    4.  回到終端機執行登入：
+        ```bash
+        docker login ghcr.io -u <你的 GitHub 帳號>
+        # 密碼處請貼上剛才複製的 Token
+        ```
+
+> [!TIP]
+> 如果登入失敗，可以先執行 `docker logout ghcr.io` 清除舊的快取。
+
+2.  **重新標記 Image (Tag)**：
+    將你的本地 Image 標記為 GHCR 的路徑。**請將 tag 命名為你的名字**。
+    ```bash
+    # 格式：docker tag [本地 Image] ghcr.io/[帳號或組織名]/[專案名]:[你的名字]
+    docker tag mcl-docker-image:v1 ghcr.io/openmcl/mcl-profiles-docker:<你的名字>
+    ```
+
+3.  **推送到 GitHub**：
+    ```bash
+    docker push ghcr.io/openmcl/mcl-profiles-docker:<你的名字>
+    ```
+
+> [!IMPORTANT]
+> 推送成功後，你可以在這個 GitHub Repository 的 **Packages** 頁面看到大家上傳的 Image！
+
+
+## 進階補充 4：常用清理與監控指令
+
+*   **查看資源佔用**：`docker stats` (可以看到各容器的 CPU/記憶體使用量)。
+*   **一鍵大掃除**：`docker system prune` (清理所有停止的容器、沒用的網路與未被標記的 Image，釋放硬碟空間)。
+
 
 ---
 
