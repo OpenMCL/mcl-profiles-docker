@@ -26,8 +26,9 @@ sh get-docker.sh
 >   ```bash
 >   sudo groupadd docker
 >   sudo usermod -aG docker $USER
+>   newgrp docker
 >   ```
->   然後重新登入才會生效。
+>   加上 `newgrp docker` 可以讓群組設定在當前視窗立即生效，或是重新登入也會生效。
 > - 這個腳本適合開發/測試環境快速部署。Docker 官方自己也說，正式生產環境建議用手動安裝步驟，這樣你對裝了什麼有更明確的掌控。
 > - 如果之後需要確認版本：
 >   ```bash
