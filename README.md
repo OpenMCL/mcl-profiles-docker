@@ -98,6 +98,7 @@ docker-compose up -d
 ## 進階補充 1：Docker Volumes (即時開發模式)
 
 在開發時，如果每次修改 HTML 都要重新 `docker build` 會非常沒效率。我們可以使用 **Volume** 功能，將本地的資料夾直接「掛載」到容器內，達成**修改存檔，網頁立即更新**的效果。
+
 docker command:
 ```bash
 # -v 代表掛載路徑：[本地絕對路徑]:[容器內路徑]
