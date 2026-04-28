@@ -98,13 +98,28 @@ docker-compose up -d
 ## 進階補充 1：Docker Volumes (即時開發模式)
 
 在開發時，如果每次修改 HTML 都要重新 `docker build` 會非常沒效率。我們可以使用 **Volume** 功能，將本地的資料夾直接「掛載」到容器內，達成**修改存檔，網頁立即更新**的效果。
-
+docker command:
 ```bash
 # -v 代表掛載路徑：[本地絕對路徑]:[容器內路徑]
 # $(pwd) 會自動抓取你目前所在的目錄
 docker run -d --rm -p 8080:80 -v $(pwd):/usr/share/nginx/html --name docker-dev mcl-docker-image:v1
 ```
+docker-compose.yml 更改:
+```bash
+version: '3.8'
 
+services:
+  web:
+    image: nginx:alpine
+    container_name: docker-compose-web
+    ports:
+      - "8081:80"
+    volumes:
+      # [本地路徑]:[容器內部的 Nginx 網頁路徑]
+      # 假設你的 docker-compose.yml 跟 index.html 放在同一個資料夾
+      - .:/usr/share/nginx/html
+    restart: always
+```
 ## 進階補充 2：使用 .dockerignore
 
 當我們執行 `docker build` 時，Docker 會將當前目錄下的所有檔案發送到 Docker Daemon。為了避免將不必要的檔案（如 `.git`、`README.md` 或本地開發工具的設定）包進 Image 中，我們可以建立一個 `.dockerignore` 檔案。
