@@ -12,9 +12,15 @@
 git clone git@github.com:OpenMCL/mcl-profiles-docker.git
 cd mcl-profiles-docker
 ```
+### Step 2：安裝docker command
 
+
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
 ## Docker
-### Step 2：撰寫 Dockerfile 
+### Step 3：撰寫 Dockerfile 
 在專案根目錄下建立一個名為 Dockerfile 的檔案（注意拼字且無副檔名），內容如下：
 ```bash
 # 使用 Nginx 最輕量的版本作為地基
@@ -27,7 +33,7 @@ COPY . /usr/share/nginx/html
 EXPOSE 80
 ```
 
-### Step 3：Build Image
+### Step 4：Build Image
 
 ```bash
 # -t 代表標記名稱，最後的「.」代表當前目錄
@@ -37,17 +43,17 @@ docker build -t mcl-docker-image:v1 .
 docker images
 ```
 
-### Step 4：Run Container
+### Step 5：Run Container
 
 ```bash
 # -d: 背景執行, --rm: 停止後自動刪除容器, -p: 電腦 8080 對接容器 80
 docker run -d --rm -p 8080:80 --name docker-web mcl-docker-image:v1
 ```
-### Step 5：查看成果
+### Step 6：查看成果
 
 在瀏覽器輸入：`http://<你的 VM IP>:8080` 
 
-### Step 6： Docker 基本操作
+### Step 7： Docker 基本操作
 
 以下是幾個常見的 Docker 指令：
 
@@ -60,7 +66,7 @@ docker run -d --rm -p 8080:80 --name docker-web mcl-docker-image:v1
 *   **查看日誌**：`docker logs` 加上容器 ID 或名稱，可以查看容器的運行日誌，對於 Debug 非常有幫助。
 
 ## Docker Compose
-### Step 7：撰寫 docker-compose.yml
+### Step 8：撰寫 docker-compose.yml
 在專案根目錄下建立一個名為 docker-compose.yml 的檔案（注意拼字），內容如下：
 ```bash
 version: '3.8'
@@ -74,16 +80,16 @@ services:
     restart: always
 ```
 
-### Step 8：啟動 container 
+### Step 9：啟動 container 
 
 ```bash
 docker-compose up -d
 ```
 
-### Step 9：查看成果
+### Step 10：查看成果
 在瀏覽器輸入：`http://<你的 VM IP>:8081` 
 
-### Step 10： Docker Compose 基本操作
+### Step 11： Docker Compose 基本操作
 
 以下是幾個常見的 Docker Compose 指令：
 
